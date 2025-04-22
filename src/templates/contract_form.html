@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formulário de Contrato</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        h1 {
+            color: #333;
+            text-align: center;
+        }
+        form {
+            margin-top: 20px;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        input[type="text"],
+        input[type="email"],
+        select {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        .section {
+            background-color: #f9f9f9;
+            padding: 15px;
+            margin-bottom: 20px;
+            border-radius: 4px;
+        }
+        .btn {
+            display: inline-block;
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 15px;
+            text-decoration: none;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <h1>Formulário de Contrato de Mútuo</h1>
+
+    <form method="post" action="{{ url_for('generate_contract') }}">
+        <input type="hidden" name="contract_type" value="{{ contract_type }}">
+
+        <div class="section">
+            <h2>Informações do Imóvel</h2>
+            <div class="form-group">
+                <label for="unidade">Unidade:</label>
+                <input type="text" name="unidade" id="unidade" required>
+            </div>
+            <div class="form-group">
+                <label for="tipo">Tipo:</label>
+                <input type="text" name="tipo" id="tipo" required>
+            </div>
+            <div class="form-group">
+                <label for="metro">Metragem (m²):</label>
+                <input type="text" name="metro" id="metro" required>
+            </div>
+            <div class="form-group">
+                <label for="metrext">Metragem por extenso:</label>
+                <input type="text" name="metrext" id="metrext" required>
+            </div>
+            <div class="form-group">
+                <label for="preco">Preço (R$):</label>
+                <input type="text" name="preco" id="preco" required>
+            </div>
+            <div class="form-group">
+                <label for="precoext">Preço por extenso:</label>
+                <input type="text" name="precoext" id="precoext" required>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>Informações do Primeiro Mutuante</h2>
+            <div class="form-group">
+                <label for="nome1">Nome:</label>
+                <input type="text" name="nome1" id="nome1" required>
+            </div>
+            <div class="form-group">
+                <label for="nac1">Nacionalidade:</label>
+                <input type="text" name="nac1" id="nac1" required>
+            </div>
+            {% if contract_type != "casados" %}
+            <div class="form-group">
+                <label for="ec1">Estado Civil:</label>
+                <input type="text" name="ec1" id="ec1" required>
+            </div>
+            {% endif %}
+            <div class="form-group">
+                <label for="prof1">Profissão:</label>
+                <input type="text" name="prof1" id="prof1" required>
+            </div>
+            <div class="form-group">
+                <label for="cpf1">CPF:</label>
+                <input type="text" name="cpf1" id="cpf1" required>
+            </div>
+            <div class="form-group">
+                <label for="rg1">RG:</label>
+                <input type="text" name="rg1" id="rg1" required>
+            </div>
+            {% if contract_type == "nao_casados" %}
+            <div class="form-group">
+                <label for="end1">Endereço:</label>
+                <input type="text" name="end1" id="end1" required>
+            </div>
+            {% else %}
+            <div class="form-group">
+                <label for="end">Endereço:</label>
+                <input type="text" name="end" id="end" required>
+            </div>
+            {% endif %}
+            <div class="form-group">
+                <label for="tel1">Telefone:</label>
+                <input type="text" name="tel1" id="tel1" required>
+            </div>
+            <div class="form-group">
+                <label for="email1">Email:</label>
+                <input type="email" name="email1" id="email1" required>
+            </div>
+        </div>
+
+        {% if contract_type != "solteiro" %}
+        <div class="section">
+            <h2>Informações do Segundo Mutuante</h2>
+            <div class="form-group">
+                <label for="nome2">Nome:</label>
+                <input type="text" name="nome2" id="nome2" required>
+            </div>
+            <div class="form-group">
+                <label for="nac2">Nacionalidade:</label>
+                <input type="text" name="nac2" id="nac2" required>
+            </div>
+            {% if contract_type == "nao_casados" %}
+            <div class="form-group">
+                <label for="ec2">Estado Civil:</label>
+                <input type="text" name="ec2" id="ec2" required>
+            </div>
+            {% endif %}
+            <div class="form-group">
+                <label for="prof2">Profissão:</label>
+                <input type="text" name="prof2" id="prof2" required>
+            </div>
+            <div class="form-group">
+                <label for="cpf2">CPF:</label>
+                <input type="text" name="cpf2" id="cpf2" required>
+            </div>
+            <div class="form-group">
+                <label for="rg2">RG:</label>
+                <input type="text" name="rg2" id="rg2" required>
+            </div>
+            {% if contract_type == "nao_casados" %}
+            <div class="form-group">
+                <label for="end2">Endereço:</label>
+                <input type="text" name="end2" id="end2" required>
+            </div>
+            {% endif %}
+            <div class="form-group">
+                <label for="tel2">Telefone:</label>
+                <input type="text" name="tel2" id="tel2" required>
+            </div>
+            <div class="form-group">
+                <label for="email2">Email:</label>
+                <input type="email" name="email2" id="email2" required>
+            </div>
+        </div>
+        {% endif %}
+
+        <div class="form-group">
+            <label for="data">Data do Contrato:</label>
+            <input type="text" name="data" id="data" placeholder="DD/MM/AAAA">
+        </div>
+
+        <button type="submit" class="btn">Gerar Contrato</button>
+    </form>
+</body>
+</html>
