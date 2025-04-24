@@ -8,11 +8,10 @@ app = Flask(__name__)
 UPLOAD_FOLDER = 'templates'
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
-# Ensure templates directory exists
+
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 
 
-# Function to fill contract templates with form data
 def fill_contract(template_path, data):
     doc = Document(template_path)
 
@@ -27,7 +26,6 @@ def fill_contract(template_path, data):
                 run.text = ""
             paragraph.runs[0].text = paragraph_text
 
-    # Create in-memory file
     file_stream = io.BytesIO()
     doc.save(file_stream)
     file_stream.seek(0)
@@ -50,10 +48,8 @@ def form():
 
 @app.route('/generate', methods=['POST'])
 def generate_contract():
-    # Get contract type
     contract_type = request.form.get('contract_type')
 
-    # Basic data common to all contract types
     data = {
         '[unidade]': request.form.get('unidade', ''),
         '[tipo]': request.form.get('tipo', ''),
@@ -71,12 +67,10 @@ def generate_contract():
         '[data]': request.form.get('data', datetime.now().strftime("%d/%m/%Y"))
     }
 
-    # Set template path based on contract type
     template_path = ""
 
     if contract_type == "casados":
         template_path = "templates/Contrato dois mutuantes casados.docx"
-        # Additional fields for married couple
         data['[end]'] = request.form.get('end', '')
         data['[nome2]'] = request.form.get('nome2', '')
         data['[nac2]'] = request.form.get('nac2', '')
@@ -88,7 +82,6 @@ def generate_contract():
 
     elif contract_type == "nao_casados":
         template_path = "templates/Contrato dois mutuantes não casados.docx"
-        # Additional fields for unmarried couple
         data['[end1]'] = request.form.get('end1', '')
         data['[end2]'] = request.form.get('end2', '')
         data['[nome2]'] = request.form.get('nome2', '')
@@ -103,15 +96,12 @@ def generate_contract():
 
     elif contract_type == "solteiro":
         template_path = "templates/Contrato mutuante solteiro.docx"
-        # Additional fields for single mutuante
         data['[end]'] = request.form.get('end', '')
         data['[ec1]'] = request.form.get('ec1', '')
 
-    # Generate the contract file
     if os.path.exists(template_path):
         file_stream = fill_contract(template_path, data)
 
-        # Return the file for download
         return send_file(
             file_stream,
             as_attachment=True,
